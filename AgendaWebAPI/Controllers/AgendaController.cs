@@ -16,8 +16,8 @@ namespace AgendaWebAPI.Controllers
             _context = context;
         }
         
-        [HttpGet("{id:int}", Name = "GetAgenda")]
-        public async Task<ActionResult<Agenda>> GetAgenda([FromRoute] int id)
+        [HttpGet(Name = "GetAgenda")]
+        public async Task<ActionResult<Agenda>> GetAgenda([FromQuery] int id)
         {
             var agenda = await _context.Agendas.FindAsync(id);
 
@@ -38,8 +38,8 @@ namespace AgendaWebAPI.Controllers
             return CreatedAtRoute("GetAgenda", new { id = agenda.IdAgenda }, agenda);
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAgenda([FromRoute] int id, [FromBody] Agenda agenda)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAgenda([FromQuery] int id, [FromBody] Agenda agenda)
         {
             if (id != agenda.IdAgenda)
             {
@@ -66,8 +66,8 @@ namespace AgendaWebAPI.Controllers
         }
 
      
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAgenda([FromRoute] int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAgenda([FromQuery] int id)
         {
             var agenda = await _context.Agendas.FindAsync(id);
 
