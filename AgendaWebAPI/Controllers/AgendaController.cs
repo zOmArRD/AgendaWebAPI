@@ -15,9 +15,9 @@ namespace AgendaWebAPI.Controllers
         {
             _context = context;
         }
-        
-        [HttpGet(Name = "GetAgenda")]
-        public async Task<ActionResult<Agenda>> GetAgenda([FromQuery] int id)
+
+        [HttpGet("{id}", Name = "GetAgendaById")]
+        public async Task<ActionResult<Agenda>> GetAgendaById(int id)
         {
             var agenda = await _context.Agendas.FindAsync(id);
 
@@ -28,18 +28,26 @@ namespace AgendaWebAPI.Controllers
 
             return agenda;
         }
-        
+
+        [HttpGet(Name = "GetAgendas")]
+        public async Task<ActionResult<IEnumerable<Agenda>>> GetAgendas()
+        {
+            var agendas = await _context.Agendas.ToListAsync();
+
+            return Ok(agendas);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Agenda>> CreateAgenda([FromBody] Agenda agenda)
         {
             _context.Agendas.Add(agenda);
             await _context.SaveChangesAsync();
 
-            return CreatedAtRoute("GetAgenda", new { id = agenda.IdAgenda }, agenda);
+            return CreatedAtRoute("GetAgendaById", new { id = agenda.IdAgenda }, agenda);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAgenda([FromQuery] int id, [FromBody] Agenda agenda)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAgenda(int id, [FromBody] Agenda agenda)
         {
             if (id != agenda.IdAgenda)
             {
@@ -65,9 +73,9 @@ namespace AgendaWebAPI.Controllers
             return NoContent();
         }
 
-     
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAgenda([FromQuery] int id)
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAgenda(int id)
         {
             var agenda = await _context.Agendas.FindAsync(id);
 
